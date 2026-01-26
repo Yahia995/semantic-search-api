@@ -83,6 +83,46 @@ uvicorn app.main:app --reload --host 0.0.0.0 --port 8000
 - API docs: http://localhost:8000/docs
 - Health check: http://localhost:8000/api/v1/health
 
+## Live Demo
+
+**Try it now:** https://semantic-search-api-fk33.onrender.com/docs
+
+**Example queries to try:**
+```bash
+# Find AI/ML documents
+curl -X POST https://semantic-search-api-fk33.onrender.com/api/v1/search \
+  -H "Content-Type: application/json" \
+  -d '{"query": "neural networks and deep learning", "top_k": 3}'
+
+# Find backend frameworks
+curl -X POST https://semantic-search-api-fk33.onrender.com/api/v1/search \
+  -H "Content-Type: application/json" \
+  -d '{"query": "building REST APIs", "top_k": 3}'
+```
+
+**Note:** Free tier may sleep after 15 minutes of inactivity. First request might take 30 seconds to wake up.
+
+## Demo
+
+![Semantic Search Demo](docs/demo.gif)
+
+*Semantic search in action: Query "building web APIs" returns documents about FastAPI and API development, even though the exact phrase does not appear in the indexed texts.*
+
+### What's Happening
+
+1. **Index** 3 documents related to machine learning, API development, and deployment  
+   - "Python is great for machine learning"  
+   - "FastAPI makes building APIs easy"  
+   - "Docker simplifies deployment"
+
+2. **Search** for `"building web APIs"` with `top_k = 2` and a score threshold of `0.3`
+
+3. **Results** ranked by semantic similarity:
+   - "FastAPI makes building APIs easy" (highest score)
+   - "Python is great for machine learning" (lower but relevant score)
+
+Notice how the system understands intent and meaning rather than relying on exact keyword matches. The query never explicitly mentions “FastAPI”, yet the most relevant document is correctly retrieved.
+
 ## API Usage
 
 ### 1. Index Documents
