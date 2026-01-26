@@ -16,6 +16,7 @@ class SemanticSearchEngine:
     ):
         print(f"Loading model: {model_name}...")
         self.model = SentenceTransformer(model_name)
+        self.model_name = model_name
         self.dimension = self.model.get_sentence_embedding_dimension()
         
         self.index: Optional[faiss.Index] = None
@@ -124,7 +125,7 @@ class SemanticSearchEngine:
         return {
             "total_documents": len(self.documents),
             "index_dimension": self.dimension,
-            "model_name": self.model._model_card_vars.get("model_name", "unknown"),
+            "model_name": self.model_name,
             "index_type": type(self.index).__name__
         }
     
