@@ -1,0 +1,24 @@
+{
+  "documents": [
+    {"text": "Python is a high-level programming language known for its simplicity and readability.", "metadata": {"category": "programming"}},
+    {"text": "Machine learning is a subset of artificial intelligence that enables systems to learn from data.", "metadata": {"category": "ai"}},
+    {"text": "FastAPI is a modern, fast web framework for building APIs with Python 3.7+ based on standard Python type hints.", "metadata": {"category": "backend"}},
+    {"text": "Docker containers provide isolated environments for running applications consistently across different systems.", "metadata": {"category": "devops"}},
+    {"text": "Natural language processing (NLP) enables computers to understand, interpret, and generate human language.", "metadata": {"category": "ai"}},
+    {"text": "React is a JavaScript library for building user interfaces, particularly single-page applications.", "metadata": {"category": "frontend"}},
+    {"text": "PostgreSQL is a powerful open-source relational database management system.", "metadata": {"category": "database"}},
+    {"text": "Kubernetes orchestrates containerized applications at scale, automating deployment and management.", "metadata": {"category": "devops"}},
+    {"text": "Deep learning uses neural networks with multiple layers to extract high-level features from raw data.", "metadata": {"category": "ai"}},
+    {"text": "RESTful APIs use HTTP methods and follow architectural constraints for building web services.", "metadata": {"category": "backend"}},
+    {"text": "Git is a distributed version control system for tracking changes in source code.", "metadata": {"category": "tools"}},
+    {"text": "TypeScript adds static typing to JavaScript, improving code quality and developer experience.", "metadata": {"category": "programming"}},
+    {"text": "Redis is an in-memory data structure store used as a database, cache, and message broker.", "metadata": {"category": "database"}},
+    {"text": "Transformers are neural network architectures that use self-attention mechanisms for NLP tasks.", "metadata": {"category": "ai"}},
+    {"text": "Spring Boot is a Java framework that simplifies building production-ready applications.", "metadata": {"category": "backend"}},
+    {"text": "Vector databases store and query high-dimensional embeddings for semantic search applications.", "metadata": {"category": "database"}},
+    {"text": "CI/CD pipelines automate the process of testing and deploying code changes.", "metadata": {"category": "devops"}},
+    {"text": "GraphQL is a query language for APIs that allows clients to request specific data.", "metadata": {"category": "backend"}},
+    {"text": "Microservices architecture structures applications as a collection of loosely coupled services.", "metadata": {"category": "architecture"}},
+    {"text": "Sentiment analysis uses NLP to determine the emotional tone of text data.", "metadata": {"category": "ai"}}
+  ]
+}

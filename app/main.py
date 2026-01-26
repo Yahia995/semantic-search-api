@@ -36,7 +36,7 @@ async def lifespan(app: FastAPI):
 app = FastAPI(
     title="Semantic Search API",
     description="NLP-powered semantic document search using HuggingFace transformers and FAISS",
-    version="1.0.0",
+    version="1.1.0",
     lifespan=lifespan
 )
 
@@ -55,7 +55,7 @@ app.include_router(router, prefix="/api/v1", tags=["Semantic Search"])
 async def root():
     return {
         "name": "Semantic Search API",
-        "version": "1.0.0",
+        "version": "1.1.0",
         "docs": "/docs",
         "endpoints": {
             "health": "/api/v1/health",

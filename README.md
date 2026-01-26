@@ -6,26 +6,32 @@ NLP-powered semantic document search using HuggingFace sentence transformers and
 
 [![FastAPI](https://img.shields.io/badge/FastAPI-0.110-009688?logo=fastapi)](https://fastapi.tiangolo.com/)
 [![Python](https://img.shields.io/badge/Python-3.12-3776AB?logo=python)](https://python.org)
+[![Docker](https://img.shields.io/badge/Docker-Ready-2496ED?logo=docker)](https://docker.com)
 [![License](https://img.shields.io/badge/License-MIT-yellow.svg)](LICENSE)
 
 </div>
 
 ## Overview
 
-A REST API that enables semantic search over document collections. Instead of keyword matching, it understands the **meaning** of queries to find relevant documents.
+A production-ready REST API that enables semantic search over document collections. Instead of keyword matching, it understands the **meaning** of queries to find relevant documents.
 
 **Example:**
 - Query: "machine learning"
 - Finds: "artificial intelligence", "neural networks", "deep learning"
 
+**New in v1.1.0:** Docker support, sample dataset, usage examples
+
 ## Features
 
 - 🔍 **Semantic Search** - Find documents by meaning, not just keywords
-- ⚡ **Fast** - Sub-100ms query times
+- ⚡ **Fast** - Sub-20ms query times
 - 🤖 **AI-Powered** - Uses HuggingFace sentence-transformers
 - 📊 **Vector Similarity** - FAISS for efficient nearest-neighbor search
 - 🔌 **REST API** - Clean FastAPI endpoints with auto-generated docs
 - 💾 **Persistent** - Index saved to disk, survives restarts
+- 🐳 **Dockerized** - One-command deployment (new in v1.1.0)
+- 📦 **Sample Data** - Pre-built dataset for testing (new in v1.1.0)
+- 📚 **Examples** - Python usage examples included (new in v1.1.0)
 
 ## Technology Stack
 
@@ -37,17 +43,28 @@ A REST API that enables semantic search over document collections. Instead of ke
 | **Vector DB** | FAISS (IndexFlatL2) | Similarity search |
 | **Validation** | Pydantic | Request/response schemas |
 | **Runtime** | Uvicorn | ASGI server |
+| **Deployment** | Docker | Containerization |
 
 ## Quick Start
 
-### Prerequisites
-```bash
-python --version  # 3.12
-```
-
-### Installation
+### Option 1: Docker (Recommended)
 ```bash
 # Clone repository
+git clone https://github.com/Yahia995/semantic-search-api.git
+cd semantic-search-api
+
+# Run with docker-compose
+docker-compose up
+
+# API will be available at http://localhost:8000
+```
+
+### Option 2: Local Installation
+```bash
+# Prerequisites
+python --version  # 3.12
+
+# Clone and setup
 git clone https://github.com/Yahia995/semantic-search-api.git
 cd semantic-search-api
 
@@ -57,14 +74,12 @@ source venv/bin/activate  # Windows (Git Bash): venv\Scripts\activate
 
 # Install dependencies
 pip install -r requirements.txt
-```
 
-### Run Server
-```bash
+# Run server
 uvicorn app.main:app --reload --host 0.0.0.0 --port 8000
 ```
 
-**Visit:**
+**Access:**
 - API docs: http://localhost:8000/docs
 - Health check: http://localhost:8000/api/v1/health
 
@@ -72,7 +87,7 @@ uvicorn app.main:app --reload --host 0.0.0.0 --port 8000
 
 ### 1. Index Documents
 
-**Request:**
+**Basic Example:**
 ```bash
 curl -X POST http://localhost:8000/api/v1/index \
   -H "Content-Type: application/json" \
@@ -81,6 +96,20 @@ curl -X POST http://localhost:8000/api/v1/index \
       {"text": "Python is great for machine learning"},
       {"text": "FastAPI makes building APIs easy"},
       {"text": "Docker simplifies deployment"}
+    ]
+  }'
+```
+
+**With Metadata:**
+```bash
+curl -X POST http://localhost:8000/api/v1/index \
+  -H "Content-Type: application/json" \
+  -d '{
+    "documents": [
+      {
+        "text": "Python programming language",
+        "metadata": {"category": "programming", "year": 1991}
+      }
     ]
   }'
 ```
@@ -103,7 +132,8 @@ curl -X POST http://localhost:8000/api/v1/search \
   -H "Content-Type: application/json" \
   -d '{
     "query": "building web APIs",
-    "top_k": 2
+    "top_k": 2,
+    "score_threshold": 0.3
   }'
 ```
 
@@ -133,8 +163,6 @@ curl -X POST http://localhost:8000/api/v1/search \
 ```
 
 ### 3. Get Statistics
-
-**Request:**
 ```bash
 curl http://localhost:8000/api/v1/stats
 ```
@@ -142,7 +170,7 @@ curl http://localhost:8000/api/v1/stats
 **Response:**
 ```json
 {
-  "total_documents": 3,
+  "total_documents": 20,
   "index_dimension": 384,
   "model_name": "all-MiniLM-L6-v2",
   "index_type": "IndexFlatL2"
@@ -150,13 +178,84 @@ curl http://localhost:8000/api/v1/stats
 ```
 
 ### 4. Clear Index
-
-**Request:**
 ```bash
 curl -X DELETE http://localhost:8000/api/v1/index
 ```
 
-**Response:** `204 No Content`
+## Examples
+
+### Python Client Example
+
+See [`examples/basic_usage.py`](examples/basic_usage.py) for a complete example.
+```python
+import requests
+
+BASE_URL = "http://localhost:8000/api/v1"
+
+# Index documents
+response = requests.post(
+    f"{BASE_URL}/index",
+    json={"documents": [
+        {"text": "Python is great for AI"},
+        {"text": "FastAPI builds fast APIs"}
+    ]}
+)
+print(response.json())
+# {'status': 'success', 'documents_indexed': 2, ...}
+
+# Search
+response = requests.post(
+    f"{BASE_URL}/search",
+    json={"query": "machine learning", "top_k": 1}
+)
+print(response.json()['results'][0]['text'])
+# 'Python is great for AI'
+```
+
+**Run the example:**
+```bash
+# Make sure server is running
+python examples/basic_usage.py
+```
+
+### Sample Dataset
+
+Load the pre-built sample dataset (20 documents across multiple categories):
+```bash
+curl -X POST http://localhost:8000/api/v1/index \
+  -H "Content-Type: application/json" \
+  -d @tests/sample_data.json
+```
+
+**Try these semantic queries:**
+```bash
+# Find AI/ML documents
+curl -X POST http://localhost:8000/api/v1/search \
+  -H "Content-Type: application/json" \
+  -d '{"query": "neural networks and deep learning", "top_k": 3}'
+# Returns: transformers, deep learning, machine learning
+
+# Find backend frameworks
+curl -X POST http://localhost:8000/api/v1/search \
+  -H "Content-Type: application/json" \
+  -d '{"query": "building web services", "top_k": 3}'
+# Returns: FastAPI, Spring Boot, RESTful APIs
+
+# Find DevOps tools
+curl -X POST http://localhost:8000/api/v1/search \
+  -H "Content-Type: application/json" \
+  -d '{"query": "deployment and orchestration", "top_k": 3}'
+# Returns: Kubernetes, Docker, CI/CD pipelines
+```
+
+**Sample data categories:**
+- Programming (Python, TypeScript)
+- AI/ML (Machine Learning, NLP, Deep Learning, Transformers)
+- Backend (FastAPI, Spring Boot, REST, GraphQL)
+- Frontend (React, TypeScript)
+- Database (PostgreSQL, Redis, Vector DBs)
+- DevOps (Docker, Kubernetes, CI/CD)
+- Architecture (Microservices)
 
 ## API Endpoints
 
@@ -169,7 +268,7 @@ curl -X DELETE http://localhost:8000/api/v1/index
 | `GET` | `/api/v1/stats` | Index statistics |
 | `DELETE` | `/api/v1/index` | Clear all documents |
 
-**Full documentation:** http://localhost:8000/docs
+**Full interactive documentation:** http://localhost:8000/docs
 
 ## Architecture
 ```mermaid
@@ -192,7 +291,6 @@ flowchart TB
     end
 
     FastAPI --> Disk["Disk Storage"]
-
 ```
 
 ## How It Works
@@ -200,18 +298,56 @@ flowchart TB
 1. **Indexing:**
    - Documents → Sentence Transformer → 384-dim embeddings
    - Embeddings stored in FAISS IndexFlatL2 (L2 distance metric)
-   - Documents + embeddings saved to disk
+   - Documents + embeddings saved to disk (`data/`)
 
 2. **Searching:**
    - Query → Sentence Transformer → embedding
    - FAISS finds nearest neighbors (most similar embeddings)
    - L2 distance converted to similarity score: `score = 1/(1+distance)`
-   - Results ranked by similarity
+   - Results ranked by similarity, filtered by optional threshold
 
 3. **Persistence:**
    - FAISS index → `data/faiss_index.index`
    - Documents → `data/faiss_index.docs` (pickle format)
    - Auto-loads on startup, auto-saves after indexing
+
+## Docker Deployment
+
+### Using Docker Compose (Recommended)
+```bash
+# Build and run
+docker-compose up --build
+
+# Run in background
+docker-compose up -d
+
+# View logs
+docker-compose logs -f
+
+# Stop
+docker-compose down
+```
+
+### Using Docker Directly
+```bash
+# Build image
+docker build -t semantic-search-api .
+
+# Run container
+docker run -d \
+  -p 8000:8000 \
+  -v $(pwd)/data:/app/data \
+  --name semantic-search \
+  semantic-search-api
+
+# View logs
+docker logs -f semantic-search
+
+# Stop container
+docker stop semantic-search
+```
+
+**Volume mounting:** The `-v` flag persists the FAISS index between container restarts.
 
 ## Project Structure
 ```
@@ -224,11 +360,18 @@ semantic-search-api/
 │   │   └── search_engine.py # Search engine logic
 │   └── models/
 │       └── schemas.py       # Pydantic models
+├── examples/
+│   └── basic_usage.py       # Python usage example (v1.1.0)
+├── tests/
+│   └── sample_data.json     # Sample dataset (v1.1.0)
 ├── data/                    # FAISS index (gitignored)
 ├── venv/                    # Virtual environment (gitignored)
+├── Dockerfile               # Docker image definition (v1.1.0)
+├── docker-compose.yml       # Docker Compose config (v1.1.0)
+├── .dockerignore            # Docker ignore rules (v1.1.0)
 ├── requirements.txt         # Python dependencies
 ├── .gitignore
-├── LICENSE                  # MIT License
+├── LICENSE                  # MIT License (v1.1.0)
 └── README.md
 ```
 
@@ -244,45 +387,11 @@ engine = SemanticSearchEngine(
 
 **Model Options:**
 
-| Model | Dimensions | Speed | Quality |
-|-------|------------|-------|---------|
-| `all-MiniLM-L6-v2` | 384 | Fast ⚡ | Good ✓ |
-| `all-mpnet-base-v2` | 768 | Slower | Better ✓✓ |
-| `paraphrase-multilingual-MiniLM-L12-v2` | 384 | Fast ⚡ | Multilingual 🌍 |
-
-## Development
-
-### Testing
-```bash
-# Run health check
-curl http://localhost:8000/api/v1/health
-
-# Index test documents
-curl -X POST http://localhost:8000/api/v1/index \
-  -H "Content-Type: application/json" \
-  -d '{"documents": [{"text": "Test document"}]}'
-
-# Search test
-curl -X POST http://localhost:8000/api/v1/search \
-  -H "Content-Type: application/json" \
-  -d '{"query": "test", "top_k": 1}'
-```
-
-### Adding Documents with Metadata
-```bash
-curl -X POST http://localhost:8000/api/v1/index \
-  -H "Content-Type: application/json" \
-  -d '{
-    "documents": [
-      {
-        "text": "Python programming language",
-        "metadata": {"category": "programming", "year": 1991}
-      }
-    ]
-  }'
-```
-
-Metadata is returned in search results but not used for ranking.
+| Model | Dimensions | Speed | Quality | Use Case |
+|-------|------------|-------|---------|----------|
+| `all-MiniLM-L6-v2` | 384 | Fast ⚡ | Good ✓ | Default, balanced |
+| `all-mpnet-base-v2` | 768 | Slower | Better ✓✓ | Higher accuracy |
+| `paraphrase-multilingual-MiniLM-L12-v2` | 384 | Fast ⚡ | Good ✓ | Multilingual 🌍 |
 
 ## Limitations
 
@@ -294,16 +403,18 @@ Metadata is returned in search results but not used for ranking.
 
 ## Roadmap
 
-**Future enhancements:**
-
-- [ ] Docker containerization
+**v1.2.0 (Planned):**
 - [ ] Authentication (API keys)
-- [ ] Multiple indices support
-- [ ] Batch search endpoint
 - [ ] Document deletion by ID
-- [ ] Hybrid search (semantic + keyword)
+- [ ] Batch search endpoint
+- [ ] Unit tests with pytest
+
+**v2.0.0 (Future):**
+- [ ] Multiple indices support
+- [ ] Hybrid search (semantic + keyword with BM25)
 - [ ] Caching layer (Redis)
-- [ ] Metrics & monitoring
+- [ ] Metrics & monitoring (Prometheus)
+- [ ] Cloud deployment guide (Railway, Render)
 
 ## Troubleshooting
 
@@ -314,11 +425,14 @@ lsof -i :8000
 
 # Kill it
 kill -9 <PID>
+
+# Or use different port
+uvicorn app.main:app --port 8080
 ```
 
 ### Model download fails
 ```bash
-# Pre-download model
+# Pre-download model manually
 python -c "from sentence_transformers import SentenceTransformer; SentenceTransformer('all-MiniLM-L6-v2')"
 ```
 
@@ -327,7 +441,32 @@ python -c "from sentence_transformers import SentenceTransformer; SentenceTransf
 # Check data directory exists and is writable
 ls -la data/
 # Should show .index and .docs files after indexing
+
+# Ensure proper permissions
+chmod 755 data/
 ```
+
+### Docker container issues
+```bash
+# View container logs
+docker-compose logs api
+
+# Rebuild without cache
+docker-compose build --no-cache
+
+# Check container status
+docker-compose ps
+```
+
+## Contributing
+
+Contributions are welcome! Please:
+
+1. Fork the repository
+2. Create a feature branch (`git checkout -b feature/amazing-feature`)
+3. Commit your changes (`git commit -m 'Add amazing feature'`)
+4. Push to the branch (`git push origin feature/amazing-feature`)
+5. Open a Pull Request
 
 ## License
 
@@ -336,13 +475,16 @@ MIT License - see [LICENSE](LICENSE) file for details.
 ## Acknowledgments
 
 - **[sentence-transformers](https://www.sbert.net/)** - Pre-trained embedding models
-- **[FAISS](https://github.com/facebookresearch/faiss)** - Efficient similarity search
+- **[FAISS](https://github.com/facebookresearch/faiss)** - Efficient similarity search by Facebook Research
 - **[FastAPI](https://fastapi.tiangolo.com/)** - Modern Python web framework
+- **[HuggingFace](https://huggingface.co/)** - Transformers ecosystem
 
 ---
 
 <div align="center">
 
-Built with ❤️ for semantic search
+**Built with ❤️ for semantic search**
+
+*Find documents by meaning, not just keywords*
 
 </div>
