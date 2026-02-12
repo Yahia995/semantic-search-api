@@ -1,0 +1,52 @@
+{
+  "jobs": [
+    {
+      "title": "Backend Python Engineer",
+      "company": "Stripe",
+      "location": "Remote",
+      "description": "We're looking for a Python backend engineer to build and scale our payment infrastructure. You'll work with FastAPI or Django, design RESTful APIs, write clean testable code, and collaborate with data teams. Strong knowledge of PostgreSQL, Redis, and Docker is required. Experience with async Python, Celery task queues, and cloud platforms (AWS/GCP) is a plus. We value clean architecture, thorough code reviews, and continuous deployment practices."
+    },
+    {
+      "title": "Machine Learning Engineer",
+      "company": "Hugging Face",
+      "location": "Paris / Remote",
+      "description": "Join our team to build and maintain ML infrastructure for transformer-based models. You'll work on model training pipelines, optimize inference latency, and contribute to open-source projects. Strong Python skills, experience with PyTorch or TensorFlow, and understanding of NLP fundamentals are essential. Familiarity with ONNX, model quantization, and distributed training is highly valued. You'll collaborate with researchers to productionize cutting-edge models."
+    },
+    {
+      "title": "Full Stack Developer",
+      "company": "Vercel",
+      "location": "San Francisco / Remote",
+      "description": "Build the future of web deployment. We need a full-stack developer comfortable with React, TypeScript, and Node.js on the frontend and backend. You'll work on our dashboard, CLI tooling, and edge infrastructure. Experience with Next.js, serverless functions, and CI/CD pipelines is essential. You should be comfortable with PostgreSQL, Prisma ORM, and cloud-native architectures. Strong communication skills and an eye for performance optimization matter here."
+    },
+    {
+      "title": "DevOps / Platform Engineer",
+      "company": "Datadog",
+      "location": "New York / Hybrid",
+      "description": "We're hiring a platform engineer to own our Kubernetes-based infrastructure. Responsibilities include managing Helm charts, writing Terraform for cloud resources, building CI/CD pipelines with GitHub Actions, and ensuring observability across microservices. You'll work with Prometheus, Grafana, and our own monitoring stack. Strong Linux fundamentals, networking knowledge, and experience with at least one major cloud provider (AWS preferred) are required."
+    },
+    {
+      "title": "NLP / AI Research Engineer",
+      "company": "Cohere",
+      "location": "Toronto / Remote",
+      "description": "We're seeking an NLP engineer to work on large language model fine-tuning, evaluation benchmarks, and retrieval-augmented generation (RAG) systems. You should have solid experience with Python, transformer architectures, and vector databases (Pinecone, Weaviate, or FAISS). Contributions to open-source NLP projects and familiarity with LangChain or LlamaIndex are strong positives. You'll collaborate closely with applied researchers and ship features used by enterprise customers."
+    },
+    {
+      "title": "Data Engineer",
+      "company": "Airbnb",
+      "location": "San Francisco / Hybrid",
+      "description": "Design and build scalable data pipelines to power analytics and ML workflows. Experience with Apache Spark, dbt, and Airflow is required. You'll work with Python and SQL daily, manage data warehouse schemas in Snowflake or BigQuery, and partner with data scientists to ensure clean, reliable datasets. Strong understanding of data modeling, partitioning strategies, and streaming with Kafka or Kinesis is a plus."
+    },
+    {
+      "title": "Frontend Engineer",
+      "company": "Linear",
+      "location": "Remote",
+      "description": "Build a fast, beautiful project management tool used by thousands of engineering teams. You'll work primarily in React and TypeScript, with a focus on performance, accessibility, and pixel-perfect design. Experience with complex state management (Zustand, Jotai), WebSockets for real-time sync, and attention to micro-interactions are key. You care about UX, write clean component code, and can discuss trade-offs between rendering strategies."
+    },
+    {
+      "title": "Software Engineer — Infrastructure",
+      "company": "Cloudflare",
+      "location": "Austin / Remote",
+      "description": "Work on the systems that power Cloudflare's global edge network. Strong C++ or Rust skills are preferred; Python scripting is common for tooling. You'll work on distributed systems, low-latency networking, and large-scale data processing. Experience with BGP routing, DNS, TLS/mTLS, and kernel networking is valuable. Comfort with Linux internals and performance profiling is expected."
+    }
+  ]
+}
