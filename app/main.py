@@ -1,3 +1,5 @@
+import os
+
 from fastapi import FastAPI
 from fastapi.middleware.cors import CORSMiddleware
 from contextlib import asynccontextmanager
@@ -7,6 +9,8 @@ from app.api.matcher_routes import matcher_router, set_matcher_engine
 from app.core.search_engine import SemanticSearchEngine
 from app.core.matcher_engine import MatcherEngine
 
+from fastapi.staticfiles import StaticFiles
+from fastapi.responses import FileResponse
 
 @asynccontextmanager
 async def lifespan(app: FastAPI):
@@ -75,3 +79,16 @@ async def root():
             "matcher_match": "/api/v1/matcher/match",
         },
     }
+
+CURRENT_DIR = os.path.dirname(os.path.abspath(__file__))
+
+PROJECT_ROOT = os.path.dirname(CURRENT_DIR)
+
+FRONTEND_DIR = os.path.join(PROJECT_ROOT, "frontend")
+
+app.mount("/frontend", StaticFiles(directory=FRONTEND_DIR), name="frontend")
+
+@app.get("/demo", include_in_schema=False)
+async def demo():
+    absolute_html_path = os.path.join(FRONTEND_DIR, "index.html")
+    return FileResponse(absolute_html_path)
